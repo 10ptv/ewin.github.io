@@ -14,6 +14,10 @@ function add_download_preview_buttons() {
         echo '<a href="' . esc_url($download_url) . '" class="download-button">Download</a>';
       }
 
+function add_good_night_message() {
+  echo 'Good night!';
+}
+
       // Output the Preview button
       if (!empty($preview_url)) {
         echo '<a href="' . esc_url($preview_url) . '" class="preview-button">Preview</a>';
@@ -21,4 +25,4 @@ function add_download_preview_buttons() {
     }
   }
 }
-add_action('archive_template', 'add_download_preview_buttons');
+add_action('wp', 'add_download_preview_buttons');
