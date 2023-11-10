@@ -1,29 +1,24 @@
 <?php
-/**
- * Plugin Name: Download Manager
- * Plugin URI: https://example.com/
- * Description: Allows users to download files from the internet.
- * Version: 1.0
- * Author: CodeWP Assistant
- * Author URI: https://codewp.ai/
- * License: GPL v2 or later
- */
 
-// Enqueue the JavaScript file for handling downloads
-function download_manager_enqueue_scripts() {
-    wp_enqueue_script( 'download-manager', plugin_dir_url( __FILE__ ) . 'assets/js/download-manager.js', array( 'jquery' ), '1.0', true );
-}
-//add_action( 'wp_enqueue_scripts', 'download_manager_enqueue_scripts' );
+function add_download_preview_buttons() {
+  if (have_posts()) {
+    while (have_posts()) {
+      the_post();
+      // Get the download URL for the file
+      $download_url = get_post_meta(get_the_ID(), 'download_url', true);
+      // Get the preview URL for the file
+      $preview_url = get_post_meta(get_the_ID(), 'preview_url', true);
 
-// Create a shortcode to display the download manager content
-function download_manager_shortcode( $atts ) {
-    // Add your logic to display the download manager content here
-    ob_start();
-    ?>
-    <div class="download-manager">
-        <!-- Add your HTML and PHP code for the download manager here -->
-    </div>
-    <?php
-    return ob_get_clean();
+      // Output the Download button
+      if (!empty($download_url)) {
+        echo '<a href="' . esc_url($download_url) . '" class="download-button">Download</a>';
+      }
+
+      // Output the Preview button
+      if (!empty($preview_url)) {
+        echo '<a href="' . esc_url($preview_url) . '" class="preview-button">Preview</a>';
+      }
+    }
+  }
 }
-add_shortcode( 'download_manager', 'download_manager_shortcode' );
+add_action('archive_template', 'add_download_preview_buttons');
